@@ -12,7 +12,7 @@ load_dotenv()  # 从 .env 读取 DEEPSEEK_API_KEY
 # ChatDeepSeek 自动读取 DEEPSEEK_API_KEY，无需手动传 key 或 base_url
 llm = ChatOpenAI(
     model="glm-5.1",                          # 真实模型名
-    base_url="http://172.21.3.106",
+    base_url="",
     api_key=os.environ["DEEPSEEK_API_KEY"],         # 手动传 key（因为变量名不是 OPENAI_API_KEY）
     temperature=2
 )
