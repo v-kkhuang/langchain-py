@@ -1,0 +1,37 @@
+[
+  {
+    "id": "FAQ001",
+    "question": "你们的退款政策是什么？",
+    "answer": "购买后14天内可申请全额退款，超过14天按比例退款。退款将在3-5个工作日内退回原支付账户。",
+    "keywords": ["退款", "退钱", "refund", "退款"],
+    "category": "billing"
+  },
+  {
+    "id": "FAQ002",
+    "question": "如何重置密码？",
+    "answer": "在登录页面点击'忘记密码'，输入注册邮箱，系统会发送重置链接到您的邮箱。链接有效期为30分钟。",
+    "keywords": ["密码", "重置", "忘记", "password"],
+    "category": "account"
+  },
+  {
+    "id": "FAQ003",
+    "question": "支持哪些付款方式？",
+    "answer": "我们支持支付宝、微信支付、银行卡和PayPal。企业用户支持对公转账。",
+    "keywords": ["付款", "支付", "payment", "充值"],
+    "category": "billing"
+  },
+  {
+    "id": "FAQ004",
+    "question": "有免费试用吗？",
+    "answer": "我们提供14天免费试用，无需绑定支付方式。试用期间所有功能开放。",
+    "keywords": ["试用", "免费", "trial", "体验"],
+    "category": "pricing"
+  },
+  {
+    "id": "FAQ005",
+    "question": "如何联系人工客服？",
+    "answer": "工作日9:00-18:00可通过页面右下角在线客服转人工。也可发邮件至support@example.com，我们会在24小时内回复。",
+    "keywords": ["人工", "客服", "联系", "电话"],
+    "category": "support"
+  }
+]

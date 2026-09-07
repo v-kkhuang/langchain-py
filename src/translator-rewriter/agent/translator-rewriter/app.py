@@ -1,11 +1,21 @@
+import logging
+import traceback
+
 import gradio as gr
 from translator import do_translate, do_rewrite
+
+logger = logging.getLogger("app")
 
 
 def translate_ui(text, source, target, style, iterative):
     if not text.strip():
         return "请输入文本", ""
-    result = do_translate(text, source, target, style, iterative=iterative)
+    try:
+        result = do_translate(text, source, target, style, iterative=iterative)
+    except Exception as e:
+        logger.error("翻译失败：%s", e)
+        logger.error(traceback.format_exc())
+        return f"❌ 翻译出错：{e}", traceback.format_exc()
     score_text = f"流畅度: {result['scores']['fluency']} | 准确度: {result['scores']['accuracy']} | 风格匹配: {result['scores']['style_match']}"
     return result["result"], score_text
 

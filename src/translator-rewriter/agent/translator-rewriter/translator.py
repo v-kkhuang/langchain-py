@@ -1,5 +1,6 @@
 import argparse
 import json
+import logging
 import os
 import sys
 
@@ -11,6 +12,12 @@ from prompts import REWRITE_CONFIG, STYLE_CONFIG
 from scoring import score_translation
 
 sys.stdout.reconfigure(encoding="utf-8")
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)
+logger = logging.getLogger("translator")
 
 load_dotenv()
 
@@ -24,6 +31,11 @@ llm = ChatOpenAI(
 
 def do_translate(text, source_lang, target_lang, style, glossary_path=None, iterative=False):
     """翻译流程。"""
+    logger.info(
+        "开始翻译 | style=%s %s→%s iterative=%s glossary=%s text=%r",
+        style, source_lang, target_lang, iterative, glossary_path, text[:50],
+    )
+
     glossary = Glossary()
     if glossary_path:
         glossary.load_from_file(glossary_path)
@@ -45,25 +57,35 @@ def do_translate(text, source_lang, target_lang, style, glossary_path=None, iter
         if feedback:
             current_prompt += f"\n\n【改进建议】\n{feedback}"
 
+        logger.info("第 %d/%d 轮：调用 LLM...", i + 1, max_rounds)
         response = llm.invoke(
             [
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
+                {"role": "user", "content": current_prompt},
             ]
         )
         translated = response.content
+        logger.info("第 %d 轮译文：%r", i + 1, translated[:80])
+
         scores = score_translation(text, translated, source_lang, target_lang, style)
         avg = sum([scores[k] for k in ["fluency", "accuracy", "style_match"]]) / 3
+        logger.info(
+            "第 %d 轮评分：流畅 %.1f | 准确 %.1f | 风格 %.1f | 均分 %.1f",
+            i + 1, scores["fluency"], scores["accuracy"], scores["style_match"], avg,
+        )
 
         if avg >= 8.0 or not iterative:
+            logger.info("结束迭代（共 %d 轮）", i + 1)
             break
         feedback = scores["reason"]
+        logger.info("均分 <8，进入下一轮，改进建议：%r", feedback[:80])
 
     return {"result": translated, "scores": scores, "rounds": i + 1}
 
 
 def do_rewrite(text, mode):
     """改写流程。"""
+    logger.info("开始改写 | mode=%s text=%r", mode, text[:50])
     config = REWRITE_CONFIG[mode]
     response = llm.invoke(
         [
@@ -71,6 +93,7 @@ def do_rewrite(text, mode):
             {"role": "user", "content": f"{config['instruction']}\n\n原文：\n{text}"},
         ]
     )
+    logger.info("改写完成：%r", response.content[:80])
     return response.content
 
 
