@@ -36,16 +36,27 @@ def demo_1_few_shot():
     # 1️⃣ 先准备若干「示例」，每个示例是 human 问 + ai 答
     examples = [
         {"input": "今天太高兴了！", "output": "emotion=positive, score=9, keywords=[高兴]"},
-        {"input": "这个产品非常难用，差评。", "output": "emotion=negative, score=2, keywords=[难用,差评]"},
-        {"input": "今天天气还可以，不冷不热。", "output": "emotion=neutral, score=5, keywords=[天气]"},
-        {"input": "真的崩溃了，bug 修了三天还没好！", "output": "emotion=negative, score=1, keywords=[崩溃,bug]"},
+        {
+            "input": "这个产品非常难用，差评。",
+            "output": "emotion=negative, score=2, keywords=[难用,差评]",
+        },
+        {
+            "input": "今天天气还可以，不冷不热。",
+            "output": "emotion=neutral, score=5, keywords=[天气]",
+        },
+        {
+            "input": "真的崩溃了，bug 修了三天还没好！",
+            "output": "emotion=negative, score=1, keywords=[崩溃,bug]",
+        },
     ]
 
     # 2️⃣ 单个示例的模板：一条 human + 一条 ai
-    example_prompt = ChatPromptTemplate.from_messages([
-        ("human", "{input}"),
-        ("ai", "{output}"),
-    ])
+    example_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("human", "{input}"),
+            ("ai", "{output}"),
+        ]
+    )
 
     # 3️⃣ 少样本模板：会自动把所有 examples 插入到 system 之后、用户输入之前
     few_shot_prompt = FewShotChatMessagePromptTemplate(
@@ -54,11 +65,13 @@ def demo_1_few_shot():
     )
 
     # 4️⃣ 拼到最终的 ChatPromptTemplate 里
-    final_prompt = ChatPromptTemplate.from_messages([
-        ("system", "你是一个情感分析器，严格按示例格式输出，不要解释。"),
-        few_shot_prompt,  # ← 这里会展开成 4 组 human+ai 示例
-        ("human", "{input}"),
-    ])
+    final_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", "你是一个情感分析器，严格按示例格式输出，不要解释。"),
+            few_shot_prompt,  # ← 这里会展开成 4 组 human+ai 示例
+            ("human", "{input}"),
+        ]
+    )
 
     # 看看最终长什么样
     print("🔍 最终模板的 messages 结构：")
@@ -147,6 +160,7 @@ def demo_3_pipeline():
     # ✨ 关键：用 RunnablePassthrough 把『第一步的输出』传给第二步的输入
     #   assign() 会在原 dict 里加一个新字段 'summarized'
     from langchain_core.output_parsers import StrOutputParser
+
     parser = StrOutputParser()  # 把 AIMessage 转成 str，下一步才好拼接
 
     full_chain = (

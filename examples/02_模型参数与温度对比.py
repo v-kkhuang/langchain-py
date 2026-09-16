@@ -84,7 +84,7 @@ def demo_multi_turn():
     print("❌ 错误示范（模型失忆）：")
     wrong_messages = [
         {"role": "human", "content": "我叫小明，今年 10 岁"},  # 这句说了但没保留
-        {"role": "human", "content": "我今年多大了？"},           # 只发这句
+        {"role": "human", "content": "我今年多大了？"},  # 只发这句
     ]
     result = llm.invoke(wrong_messages)
     print(f"   问：我今年多大了？")
