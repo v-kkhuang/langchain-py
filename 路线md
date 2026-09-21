@@ -33,17 +33,24 @@
             
 ### Day 5:   注册大模型平台（如阿里云百炼/DeepSeek/OpenAI），获取 API Key，跑通最基础的文本生成调用 完成
 
-### Day 6-7: 学习 Prompt 基础，掌握 System/User 消息结构，尝试用 Few-shot 提升输出稳定性
+### Day 6-7: 学习 Prompt 基础，掌握 System/User 消息结构，尝试用 Few-shot 提升输出稳定性 完成
 
 实战任务：
-  【环境搭建与基础调用】搭建本地 Python 虚拟环境，写一个 CLI 聊天脚本，支持多轮对话（手动维护 messages 数组），并实现流式输出（打字机效果）
+  【环境搭建与基础调用】搭建本地 Python 虚拟环境，写一个 CLI 聊天脚本，支持多轮对话（手动维护 messages 数组），并实现流式输出（打字机效果）  
 
 ## 【第 2 周】Function Calling 原理与 ReAct 范式
 
 
 ### Day 8-9:   深入理解 Function Calling。模型本质是输出 JSON，学习如何定义 Tool Schema（JSON Schema）
+
+
+
 ### Day 10-11: 学习 ReAct 范式（Reason → Act → Observe）。理解 Agent 的死循环、Context 爆炸等失败模式
+
+
 ### Day 12-13: 学习 Prompt Caching（2026 降本关键），理解 KV Cache 复用原理
+
+
 ### Day 14:    思考 Agent 与 Workflow 的本质区别
 
 实战任务
