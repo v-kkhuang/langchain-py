@@ -39,10 +39,39 @@
   【环境搭建与基础调用】搭建本地 Python 虚拟环境，写一个 CLI 聊天脚本，支持多轮对话（手动维护 messages 数组），并实现流式输出（打字机效果）  
 
 ## 【第 2 周】Function Calling 原理与 ReAct 范式
-
-
 ### Day 8-9:   深入理解 Function Calling。模型本质是输出 JSON，学习如何定义 Tool Schema（JSON Schema）
 
+- 什么是function calling:
+ 是llm内置的方法支持大模型通过用户的提问，解析问题，分析tools列表里面的工具，自主决定使用哪些工具，来帮住大模型回复用户的问题，LLM 通过结构化输出（JSON）决定调用哪个外部函数、传什么参数，模型输出的是结构化指令
+ 
+- json schema 是干什么的：
+  json schema是用来定义工具列表的：schema里面定义了工具的名称，描述，以及使用工具所需要的参数定义
+
+- json schema是在什么情况下使用：
+  在大模型无法解决用户问题的时候，我们可以向大模型提供一系列的工具时，jsonschema 就是用来定义工具的
+- 大模型会自己执行工具函数吗： 不会，大模型不能自己调用函数，大模型只能推理，大模型通过读取schema里面的工具，推理出需要使用的工具，然后通过message里面返回的tool_name来使用代码调用函数，执行结果获取到之后才统一打包给大模型，执行用户提问的输出
+
+- 
+  
+面试问题：
+1.当工具是多个参数时，用户提供信息只有部分，怎么处理呢？
+  答：参数校验，历史对话里面搜索补全，反问用户
+2.非常多的工具集的时候，大模型是怎么精确的识别使用的工具？
+  答：
+
+```
+    response = client.chat.completions.create(
+        model=os.environ["DEEPSEEK_MODEL"],
+        tool_choice="auto",
+        messages=messages,
+        tools=tools,
+    )
+```
+tool_choice:让大模型自动选择
+- auto 默认
+- none 禁止调用
+- required 必须调用一个或者多个
+- {"type": "function", "function": {"name": "ask_user"}}  指定使用，只能调用一个
 
 
 ### Day 10-11: 学习 ReAct 范式（Reason → Act → Observe）。理解 Agent 的死循环、Context 爆炸等失败模式
